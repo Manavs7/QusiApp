@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Qusi</string>
+    <string name="logo_discr">logo</string>
+    <string name="qusi">Qusi</string>
+    <string name="welcome">Welcome</string>
+    <string name="next">Next</string>
+
 </resources>
