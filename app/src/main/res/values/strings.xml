@@ -3,6 +3,7 @@
     <string name="logo_discr">logo</string>
     <string name="qusi">Qusi</string>
     <string name="welcome">Welcome</string>
-    <string name="next">Next</string>
+    <string name="go">Let's Go</string>
+    <string name="loginpage">loginpage</string>
 
 </resources>

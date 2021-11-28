@@ -4,7 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/drawable/custum_button.xml" value="0.35625" />
-        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/activity_login.xml" value="0.18" />
+        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/activity_main.xml" value="0.25" />
       </map>
     </option>
   </component>
