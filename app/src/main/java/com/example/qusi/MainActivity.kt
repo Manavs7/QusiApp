@@ -11,12 +11,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         //Button click
         goToLogin()
     }
 
 
-    //function for Button Click-> new activity
+    //function for Button Click-> new activity(loginpage)
     private fun goToLogin(){
         val button:Button = findViewById(R.id.homebutton)
         button.setOnClickListener {

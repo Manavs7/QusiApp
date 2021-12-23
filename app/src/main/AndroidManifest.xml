@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qusi">
         <activity
+            android:name=".Homepage"
+            android:exported="false" />
+        <activity
             android:name=".Login"
             android:exported="false" />
         <activity
