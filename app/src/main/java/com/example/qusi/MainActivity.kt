@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private fun goToLogin(){
         val button:Button = findViewById(R.id.homebutton)
         button.setOnClickListener {
-            val intent = Intent(this,Login::class.java)
+            val intent = Intent(this,Userinfo::class.java)
             startActivity(intent)
         }
     }

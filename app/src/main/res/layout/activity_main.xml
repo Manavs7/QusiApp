@@ -55,8 +55,8 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/homebutton"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="265dp"
+        android:layout_height="62dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/custum_button"
         android:text="@string/go"

@@ -4,6 +4,7 @@
     <string name="qusi">Qusi</string>
     <string name="welcome">Welcome</string>
     <string name="go">LetGo</string>
-    <string name="loginpage">loginpage</string>
+    <string name="userinfo">User Info</string>
+    <string name="ready">Next</string>
 
 </resources>
