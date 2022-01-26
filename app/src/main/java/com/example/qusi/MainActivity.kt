@@ -13,19 +13,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        //Button click
-        goToLogin()
+
     }
 
-
-    //function for Button Click-> new activity(loginpage)
-    private fun goToLogin(){
-        val button:Button = findViewById(R.id.homebutton)
-        button.setOnClickListener {
-            val intent = Intent(this,Userinfo::class.java)
-            startActivity(intent)
-        }
-    }
 
 }
 

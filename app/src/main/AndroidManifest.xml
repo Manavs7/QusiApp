@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qusi">
         <activity
+            android:name=".Fragmentactivity"
+            android:exported="false" />
+        <activity
+            android:name=".fragments.Fragmentactivity"
+            android:exported="false" />
+        <activity
             android:name=".Homepage"
             android:exported="false" />
         <activity
