@@ -11,11 +11,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
+        //Ga naar Userdata activity
+        GotoUserdata()
 
     }
-
-
+    //function login
+    fun GotoUserdata()
+    {
+        val btnLogin = findViewById<Button>(R.id.homebutton)
+        btnLogin.setOnClickListener {
+            val intent = Intent(this,Userdata::class.java)
+            startActivity(intent)
+        }
+    }
 }
 
