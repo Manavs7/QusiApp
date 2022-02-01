@@ -13,6 +13,7 @@
 
 
     <EditText
+        android:id="@+id/etusername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -27,6 +28,7 @@
         />
 
     <EditText
+        android:id="@+id/etage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -40,6 +42,7 @@
         />
 
     <EditText
+        android:id="@+id/etheight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -53,6 +56,7 @@
         />
 
     <EditText
+        android:id="@+id/etweight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

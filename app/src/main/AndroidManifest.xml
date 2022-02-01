@@ -9,26 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Qusi" >
-        <activity
-            android:name=".sdfsdf"
-            android:exported="false"
-            android:label="@string/title_activity_sdfsdf"
-            android:theme="@style/Theme.Qusi.NoActionBar" />
+
         <activity
             android:name=".Userdata"
             android:exported="false" />
         <activity
             android:name=".Fragmentactivity"
             android:exported="false" />
-        <activity
-            android:name=".fragments.Fragmentactivity"
-            android:exported="false" />
-        <activity
-            android:name=".Homepage"
-            android:exported="false" />
-        <activity
-            android:name=".Userinfo"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true" >
