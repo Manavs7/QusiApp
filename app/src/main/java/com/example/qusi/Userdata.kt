@@ -10,16 +10,16 @@ class Userdata : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_userdata)
 
-        //Ga naar Home fragmet(Fragment activity)
-        GoToHome()
+       //Ga naar UserActivity
+        GoToUserActivity()
     }
 
 
-    fun GoToHome()
+    fun GoToUserActivity()
     {
         val btnUserdata = findViewById<Button>(R.id.Userdatabutton)
         btnUserdata.setOnClickListener {
-            val intent = Intent(this,Fragmentactivity::class.java)
+            val intent = Intent(this,UserActivity::class.java)
             startActivity(intent)
         }
     }
