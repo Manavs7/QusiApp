@@ -5,14 +5,17 @@
     <item android:title="Home"
           android:id="@+id/homeFragment"
           android:icon="@drawable/ic_baseline_home_24"/>
-    <item android:title="Info"
-        android:id="@+id/infoFragment"
-        android:icon="@drawable/ic_baseline_info_24"/>
+    <item android:title="Workout"
+        android:id="@+id/workoutFragment"
+        android:icon="@drawable/ic_baseline_fitness_center_24"/>
+
     <item android:title="Recipes"
         android:id="@+id/recipesFragment"
         android:icon="@drawable/ic_baseline_restaurant_24"/>
-    <item android:title="Workout"
-        android:icon="@drawable/ic_baseline_fitness_center_24"/>
+
+    <item android:title="Info"
+        android:id="@+id/infoFragment"
+        android:icon="@drawable/ic_baseline_info_24"/>
     <item android:title="Profile"
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_person_24"/>

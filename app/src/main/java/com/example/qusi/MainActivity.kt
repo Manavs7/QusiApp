@@ -30,8 +30,10 @@ class MainActivity : AppCompatActivity() {
         txtView.startAnimation(animationText)
 
 
-
       Handler(Looper.myLooper()!!).postDelayed({
+
+          //if table rows in table USERS <1 --> dan naar userdata activity|| anders onmiddelijk naar homepage
+          //<---code---->
           val intent = Intent(this, Userdata::class.java)
           startActivity(intent)
           finish()
