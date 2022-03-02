@@ -1,19 +1,24 @@
 package com.example.qusi
 
-import android.widget.EditText
+import android.app.Application
+
 
 class User {
 
-    var Username: String =""
+companion object{
+
+    var Username: String = ""
     var Age: Int = 0
     var Weight: Int = 0
     var Height: Int = 0
+    var Gender: String = ""
+    var UActivity: String = ""
 
-    constructor(pName: String, pAge: Int, pWeight: Int, pHeight: Int)
-    {
-        this.Username = pName
-        this.Age = pAge
-        this.Weight = pWeight
-        this.Height = pHeight
+    get() {
+        return Username
     }
+
+}
+
+
 }

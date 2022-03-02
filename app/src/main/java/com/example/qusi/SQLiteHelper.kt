@@ -5,9 +5,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
-import kotlin.coroutines.coroutineContext
 
-class SQLiteHelper(var context:Context) : SQLiteOpenHelper(context, DATABASE_NAME,null, DATABASE_VERSION) {
+class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,null, DATABASE_VERSION) {
 
     companion object{
 
@@ -34,7 +33,7 @@ class SQLiteHelper(var context:Context) : SQLiteOpenHelper(context, DATABASE_NAM
         onCreate(db)
     }
 
-    fun InsertData(User: User)
+    fun InsertData()
     {
         val db = this.writableDatabase
         var cv = ContentValues()
@@ -43,6 +42,8 @@ class SQLiteHelper(var context:Context) : SQLiteOpenHelper(context, DATABASE_NAM
         cv.put("AGE", User.Age)
         cv.put("HEIGHT", User.Height)
         cv.put("WEIGHT", User.Weight)
+        cv.put("GENDER", User.Gender)
+        cv.put("ACTIVITY", User.UActivity)
 
         var result = db.insert("USERS",null,cv)
         if(result == (-1).toLong())
@@ -53,6 +54,21 @@ class SQLiteHelper(var context:Context) : SQLiteOpenHelper(context, DATABASE_NAM
         {
             Toast.makeText(context,"Data Inserted",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun UpdateData()
+    {
+        /*val db = this.writableDatabase
+        var cv = ContentValues()
+        val rs = db.rawQuery("SELECT * FROM USERS",null)
+
+        cv.put("USERNAME",User.Username)
+        cv.put("AGE", User.Age)
+        cv.put("HEIGHT", User.Height)
+        cv.put("WEIGHT", User.Weight)
+        cv.put("ACTIVITY", User.UActivity)
+
+        db.update("USERS",cv,"USERID = ?", arrayOf(rs.getString(0)))*/
     }
 
 }

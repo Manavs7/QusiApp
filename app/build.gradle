@@ -48,6 +48,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    //Stetho
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation'com.facebook.stetho:stetho-okhttp3:1.5.1'
 
     //navigatie componenten
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.4"

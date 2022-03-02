@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.facebook.stetho.Stetho
 
 class Userdata : AppCompatActivity() {
     //Hoofdvariabele
@@ -19,7 +20,8 @@ class Userdata : AppCompatActivity() {
         val age = findViewById<EditText>(R.id.etage)
         val height = findViewById<EditText>(R.id.etheight)
         val weight = findViewById<EditText>(R.id.etweight)
-
+        //stetho
+        //Stetho.initializeWithDefaults(this)
         //Ga naar UserActivity
         btnUserdata.setOnClickListener {
 
@@ -29,10 +31,10 @@ class Userdata : AppCompatActivity() {
                           weight.text.toString().length> 0
                     )
             {
-                val user = User(username.text.toString(),age.text.toString().toInt(),height.text.toString().toInt(),weight.text.toString().toInt())
-                val db = SQLiteHelper(this)
-
-                db.InsertData(user)
+                User.Username = username.text.toString()
+                User.Age = age.text.toString().toInt()
+                User.Height = height.text.toString().toInt()
+                User.Weight = weight.text.toString().toInt()
 
             }
 

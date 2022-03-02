@@ -1,18 +1,14 @@
 package com.example.qusi
 
 import android.content.Intent
-import android.icu.number.Scale
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.ScaleAnimation
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.facebook.stetho.Stetho
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,14 +24,31 @@ class MainActivity : AppCompatActivity() {
 
         logoImageview.startAnimation(animationLogo)
         txtView.startAnimation(animationText)
-
+        //Stetho
+        Stetho.initializeWithDefaults(this)
 
       Handler(Looper.myLooper()!!).postDelayed({
 
-          //if table rows in table USERS <1 --> dan naar userdata activity|| anders onmiddelijk naar homepage
-          //<---code---->
-          val intent = Intent(this, Userdata::class.java)
-          startActivity(intent)
+          //if number of table rows in the table USERS < 1 --> go to userdata activity | else -> Home
+
+          //database variables
+           val helper = SQLiteHelper(this)
+          val db = helper.readableDatabase
+          val rs = db.rawQuery("SELECT * FROM USERS",null)
+
+
+           if(rs.count < 1)
+           {
+               val intent = Intent(this, Userdata::class.java)
+               startActivity(intent)
+           }
+
+          else
+           {
+               val intent = Intent(this, Fragmentactivity::class.java)
+               startActivity(intent)
+           }
+
           finish()
         },4000)
 
