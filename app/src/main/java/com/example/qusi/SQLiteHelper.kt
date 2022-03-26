@@ -25,11 +25,13 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
         //Create Users table
         db?.execSQL("CREATE TABLE USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,USERNAME TEXT, AGE INTEGER, HEIGHT INTEGER, WEIGHT INTEGER, GENDER TEXT, ACTIVITY TEXT)")
-
+        //Create User Goal table
+        db?.execSQL("CREATE TABLE GOAL(MaintenanceCal Double, ProteinCal Double, ProteinG Double, FatCal Double, FatG Double, CarbsCal Double, CarbsG Double)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
        db!!.execSQL("DROP TABLE IF EXISTS USERS")
+        db!!.execSQL("DROP TABLE IF EXISTS GOAL")
         onCreate(db)
     }
 
@@ -56,19 +58,6 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         }
     }
 
-    fun UpdateData()
-    {
-        /*val db = this.writableDatabase
-        var cv = ContentValues()
-        val rs = db.rawQuery("SELECT * FROM USERS",null)
 
-        cv.put("USERNAME",User.Username)
-        cv.put("AGE", User.Age)
-        cv.put("HEIGHT", User.Height)
-        cv.put("WEIGHT", User.Weight)
-        cv.put("ACTIVITY", User.UActivity)
-
-        db.update("USERS",cv,"USERID = ?", arrayOf(rs.getString(0)))*/
-    }
 
 }

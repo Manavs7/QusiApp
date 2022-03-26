@@ -11,6 +11,7 @@ import android.widget.*
 import com.example.qusi.R
 import com.example.qusi.SQLiteHelper
 import com.example.qusi.User
+import kotlin.math.round
 
 
 class ProfileFragment : Fragment() {
@@ -26,6 +27,7 @@ class ProfileFragment : Fragment() {
         val age = v.findViewById<EditText>(R.id.profAge)
         val weight = v.findViewById<EditText>(R.id.profWeight)
         val height = v.findViewById<EditText>(R.id.profHeight)
+        val activity = v.findViewById<Spinner>(R.id.sp_Updateactivty)
         val updatebtn = v.findViewById<Button>(R.id.btnUpdate)
 
         //spinnder
@@ -44,8 +46,13 @@ class ProfileFragment : Fragment() {
             //Tip: for edittext use ".setText" instead of ".text" :)
            username.setText(rs.getString(1))
             age.setText(rs.getString(2))
-            weight.setText(rs.getString(3))
-            height.setText(rs.getString(4))
+            weight.setText(rs.getString(4))
+            height.setText(rs.getString(3))
+
+            //User.UActivity = sprActivites.getItemAtPosition(sprActivites.selectedItemPosition).toString()
+          //  val itemId = activity.getItemIdAtPosition(rs.getString(6).toInt())
+           // activity.setSelection(itemId.toInt())
+
         }
 
         //update User data

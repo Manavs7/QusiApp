@@ -55,6 +55,9 @@ class UserActivity : AppCompatActivity() {
             //Add all userdata to database
              helper.InsertData()
 
+
+
+
             val intent = Intent(this, Fragmentactivity::class.java)
             startActivity(intent)
 

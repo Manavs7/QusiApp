@@ -14,9 +14,16 @@ companion object{
     var Gender: String = ""
     var UActivity: String = ""
 
-    get() {
-        return Username
-    }
+    //Macros
+
+    var uMainetenanceCal: Int = 0
+    var uProteinCal: Int = 0
+    var uProteinG: Int = 0
+    var uFatCal: Int = 0
+    var uFatG: Int = 0
+    var uCarbsCal: Int = 0
+    var uCarbsG: Int = 0
+
 
 }
 

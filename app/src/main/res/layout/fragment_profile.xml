@@ -19,7 +19,6 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="@drawable/gradientbackground"
-
       >
 
 
@@ -31,6 +30,7 @@
        android:fontFamily="@font/baloo"
        android:text="Username:"
        android:textSize="20sp"
+
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
        app:layout_constraintHorizontal_bias="0.071"

@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
            }
 
           finish()
-        },4000)
+        },5000)
 
 
 

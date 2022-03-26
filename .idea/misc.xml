@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/drawable/custum_button.xml" value="0.35625" />
+        <entry key="..\:/AS Projects/Qusi/app/src/main/res/drawable/custumcardviewstyle.xml" value="0.35625" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/drawable/edittextcustumization.xml" value="0.33645833333333336" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/drawable/gradientbackground.xml" value="0.33645833333333336" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/drawable/headerbackgroind.xml" value="0.34933605720122574" />
@@ -20,8 +21,8 @@
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/content_sdfsdf.xml" value="0.27447916666666666" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/dropdownitem.xml" value="0.19519927536231885" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_first.xml" value="0.27447916666666666" />
-        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_home.xml" value="0.33" />
-        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_info.xml" value="0.22291666666666668" />
+        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_info.xml" value="0.33" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_profile.xml" value="0.2" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_recipes.xml" value="0.22291666666666668" />
         <entry key="..\:/AS Projects/Qusi/app/src/main/res/layout/fragment_workout.xml" value="0.22291666666666668" />
