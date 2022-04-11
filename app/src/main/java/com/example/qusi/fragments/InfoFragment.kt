@@ -23,7 +23,14 @@ class InfoFragment : Fragment() {
         val txtProtein = v.findViewById<TextView>(R.id.txtProtein)
         val txtFat = v.findViewById<TextView>(R.id.txtFat)
         val txtCarbs = v.findViewById<TextView>(R.id.txtCarbs)
+      /*  val txtProteinPer = v.findViewById<TextView>(R.id.txtProteinPer)
+        val txtFatPer = v.findViewById<TextView>(R.id.txtFatPer)
+        val txtCarbsPer = v.findViewById<TextView>(R.id.txtCarbsPer)
 
+        txtProteinPer.text = "${User.uProteinPer}%"
+        txtFatPer.text = "${User.uFatPer}%"
+        txtCarbsPer.text = "${User.uCarbsPer}%"
+        */
         txtProtein.text = "${User.uProteinG}g"
         txtFat.text = "${User.uFatG}g"
         txtCarbs.text = "${User.uCarbsG}g"

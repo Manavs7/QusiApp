@@ -24,6 +24,9 @@ companion object{
     var uCarbsCal: Int = 0
     var uCarbsG: Int = 0
 
+    var uProteinPer: Int = 0
+    var uFatPer: Int= 0
+    var uCarbsPer: Int = 0
 
 }
 

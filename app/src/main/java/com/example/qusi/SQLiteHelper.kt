@@ -26,12 +26,16 @@ class SQLiteHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         //Create Users table
         db?.execSQL("CREATE TABLE USERS(USERID INTEGER PRIMARY KEY AUTOINCREMENT,USERNAME TEXT, AGE INTEGER, HEIGHT INTEGER, WEIGHT INTEGER, GENDER TEXT, ACTIVITY TEXT)")
         //Create User Goal table
-        db?.execSQL("CREATE TABLE GOAL(MaintenanceCal Double, ProteinCal Double, ProteinG Double, FatCal Double, FatG Double, CarbsCal Double, CarbsG Double)")
+        db?.execSQL("CREATE TABLE GOAL(GOALid INTEGER PRIMARY KEY AUTOINCREMENT,MaintenanceCal Double, ProteinCal Double, ProteinG Double, FatCal Double, FatG Double, CarbsCal Double, CarbsG Double)")
+        //Create Food tabel
+        db?.execSQL("CREATE TABLE FOOD(FOODID INTEGER PRIMARY KEY AUTOINCREMENT ,FOODNAME TEXT,FOODPROTEING INTEGER,FOODFATG INTEGER,FOODCARBSG INTEGER, FOODPROTEINCAL INTEGER, FOODFATCAL INTEGER, FOODCARBSCAL INTEGER)")
     }
+
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
        db!!.execSQL("DROP TABLE IF EXISTS USERS")
         db!!.execSQL("DROP TABLE IF EXISTS GOAL")
+        db!!.execSQL("DROP TABLE IF EXISTS FOOD")
         onCreate(db)
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import kotlin.math.round
 
 
 class UserActivity : AppCompatActivity() {
@@ -33,13 +34,6 @@ class UserActivity : AppCompatActivity() {
         val btnReadybutton = findViewById<Button>(R.id.readybutton)
         btnReadybutton.setOnClickListener {
 
-            //Database
-            val helper = SQLiteHelper(this)
-            val db = helper.writableDatabase
-            var cv = ContentValues()
-
-
-
             //Spinner data
            User.UActivity = sprActivites.getItemAtPosition(sprActivites.selectedItemPosition).toString()
 
@@ -52,11 +46,35 @@ class UserActivity : AppCompatActivity() {
             {
                 User.Gender = radiobtnFemale.text.toString()
             }
+
+            //Database
+            val helper = SQLiteHelper(this)
+            val db = helper.writableDatabase
+            var cv = ContentValues()
+
             //Add all userdata to database
              helper.InsertData()
 
+           //add usergoal data to database
 
+            cv.put("MaintenanceCal", User.uMainetenanceCal)
+            cv.put("ProteinCal", User.uProteinCal)
+            cv.put("ProteinG", User.uProteinG)
+            cv.put("FatCal", User.uFatCal)
+            cv.put("FatG", User.uFatG)
+            cv.put("CarbsCal", User.uCarbsCal)
+            cv.put("CarbsG", User.uCarbsG)
 
+            var result = db.insert("GOAL", null, cv)
+
+            if(result == (-1).toLong())
+            {
+                Toast.makeText(applicationContext,"Failed", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(applicationContext,"GOAL Setup Ready", Toast.LENGTH_SHORT).show()
+            }
 
             val intent = Intent(this, Fragmentactivity::class.java)
             startActivity(intent)
