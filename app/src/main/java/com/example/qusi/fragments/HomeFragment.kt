@@ -16,6 +16,10 @@ import com.example.qusi.SQLiteHelper
 import com.example.qusi.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.round
+import android.R.id
+
+
+
 
 
 
@@ -172,7 +176,6 @@ class HomeFragment : Fragment() {
             lstBreakfast.adapter = adapterBreakfast
 
 
-
             addButton.setOnClickListener {
                 //custum dialog linken aan layout
                 val mDialogView =
@@ -185,10 +188,13 @@ class HomeFragment : Fragment() {
                         "Done",
                         DialogInterface.OnClickListener { dialogInterface, i ->
 
-                            val etfoodname = mDialogView.findViewById<EditText>(R.id.etFoodname)
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            etfoodname.setAdapter(adapterBreakfast)
                             val cvFood = ContentValues()
                             cvFood.put("FOODNAME", etfoodname.text.toString())
-                            db.insert("FOOD", null, cvFood)
+                            db.insert("FOODBREAKFAST", null, cvFood)
+                                arrBreakfast.add(etfoodname.text.toString())
+                                adapterBreakfast.notifyDataSetChanged()
 
                         })
 
@@ -198,7 +204,6 @@ class HomeFragment : Fragment() {
                 mBuiler.show()
 
             }
-
 
             lstBreakfast.onItemClickListener =
                 AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -215,7 +220,8 @@ class HomeFragment : Fragment() {
                             arrBreakfast.removeAt(position)
                             adapterBreakfast.notifyDataSetChanged()
 
-                            db.delete("FOOD", "FOODNAME = ?", null)
+
+                             db.delete("FOODBREAKFAST", "FOODNAME = '$clickedItem'", null)
                         }
                         setNeutralButton("Cancel") { _, _ -> }
                     }.create().show()
@@ -223,14 +229,226 @@ class HomeFragment : Fragment() {
                 }
 
             //display breakfast data in list
-            val rsFood = db.rawQuery("SELECT * FROM FOOD", null)
-            while (rsFood.moveToNext()) {
-                val foodname = rsFood.getString(1)
+            val rsBREAKFAST = db.rawQuery("SELECT * FROM FOODBREAKFAST", null)
+            while (rsBREAKFAST.moveToNext()) {
+                val foodname = rsBREAKFAST.getString(1)
                 arrBreakfast.add(foodname)
                 adapterBreakfast.notifyDataSetChanged()
             }
 
         //--------------------------------------------Lunch list------------------------------------------------------------
+            //Lunch
+            val addButtonLunch = v.findViewById<ImageView>(R.id.addLunch)
+            val lstLunch= v.findViewById<ListView>(R.id.lstLunch)
+            val arrLunch = mutableListOf<String>()
+            val adapterLunch: ArrayAdapter<String> =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrLunch)
+            lstLunch.adapter = adapterLunch
+
+            addButtonLunch.setOnClickListener {
+                //custum dialog linken aan layout
+                val mDialogView =
+                    LayoutInflater.from(requireContext()).inflate(R.layout.addfooddiaolog, null)
+                //alert dialog opbouwen
+                var mBuiler = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                    .setTitle("Add Food To Your Diary")
+                    .setPositiveButton(
+                        "Done",
+                        DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val cvFood = ContentValues()
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            db.insert("FOODLUNCH", null, cvFood)
+                            arrLunch.add(etfoodname.text.toString())
+                            adapterLunch.notifyDataSetChanged()
+
+                        })
+
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                mBuiler.show()
+
+            }
+
+
+
+            lstLunch.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+
+
+                    // show an alert dialog to confirm
+                    val clickedItem = parent.getItemAtPosition(position).toString()
+
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Remove Food")
+                        setMessage("Do you want to remove $clickedItem from your diary?")
+                        setPositiveButton("Delete") { _, _ ->
+                            // remove clicked item from second list view
+                            arrLunch.removeAt(position)
+                            adapterLunch.notifyDataSetChanged()
+
+
+                            db.delete("FOODLUNCH", "FOODNAME = '$clickedItem'", null)
+                        }
+                        setNeutralButton("Cancel") { _, _ -> }
+                    }.create().show()
+
+                }
+
+
+            //display LUNCH data in list
+            val rsLUNCH = db.rawQuery("SELECT * FROM FOODLUNCH", null)
+            while (rsLUNCH.moveToNext()) {
+                val foodname = rsLUNCH.getString(1)
+                arrLunch.add(foodname)
+                adapterLunch.notifyDataSetChanged()
+            }
+
+            //--------------------------------------------Snacks list------------------------------------------------------------
+            //Snacks variables
+            val addButtonSnacks = v.findViewById<ImageView>(R.id.addSnacks)
+            val lstSnacks= v.findViewById<ListView>(R.id.lstSnacks)
+            val arrSnacks = mutableListOf<String>()
+            val adapterSnacks: ArrayAdapter<String> =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrSnacks)
+            lstSnacks.adapter = adapterSnacks
+
+
+            addButtonSnacks.setOnClickListener {
+                //custum dialog linken aan layout
+                val mDialogView =
+                    LayoutInflater.from(requireContext()).inflate(R.layout.addfooddiaolog, null)
+                //alert dialog opbouwen
+                var mBuiler = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                    .setTitle("Add Food To Your Diary")
+                    .setPositiveButton(
+                        "Done",
+                        DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val cvFood = ContentValues()
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            db.insert("FOODSNACKS", null, cvFood)
+                            arrSnacks.add(etfoodname.text.toString())
+                            adapterSnacks.notifyDataSetChanged()
+
+                        })
+
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                mBuiler.show()
+
+            }
+
+
+            lstSnacks.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+
+
+                    // show an alert dialog to confirm
+                    val clickedItem = parent.getItemAtPosition(position).toString()
+
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Remove Food")
+                        setMessage("Do you want to remove $clickedItem from your diary?")
+                        setPositiveButton("Delete") { _, _ ->
+                            // remove clicked item from second list view
+                            arrSnacks.removeAt(position)
+                            adapterSnacks.notifyDataSetChanged()
+
+
+                            db.delete("FOODSNACKS", "FOODNAME = '$clickedItem'", null)
+                        }
+                        setNeutralButton("Cancel") { _, _ -> }
+                    }.create().show()
+
+                }
+
+
+            //display SNACKS data in list
+            val rsSNACKS = db.rawQuery("SELECT * FROM FOODSNACKS", null)
+            while (rsSNACKS.moveToNext()) {
+                val foodname = rsSNACKS.getString(1)
+                arrSnacks.add(foodname)
+                adapterSnacks.notifyDataSetChanged()
+            }
+
+
+        //--------------------------------------------DINNER list------------------------------------------------------------
+            //DINNER variables
+            val addButtonDinner = v.findViewById<ImageView>(R.id.addDinner)
+            val lstDinner= v.findViewById<ListView>(R.id.lstDinner)
+            val arrDinner = mutableListOf<String>()
+            val adapterDinner: ArrayAdapter<String> =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrDinner)
+            lstDinner.adapter = adapterDinner
+
+
+            addButtonDinner.setOnClickListener {
+                //custum dialog linken aan layout
+                val mDialogView =
+                    LayoutInflater.from(requireContext()).inflate(R.layout.addfooddiaolog, null)
+                //alert dialog opbouwen
+                var mBuiler = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                    .setTitle("Add Food To Your Diary")
+                    .setPositiveButton(
+                        "Done",
+                        DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val cvFood = ContentValues()
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            db.insert("FOODDINNER", null, cvFood)
+                            arrDinner.add(etfoodname.text.toString())
+                            adapterDinner.notifyDataSetChanged()
+
+                        })
+
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                mBuiler.show()
+
+            }
+
+
+            lstDinner.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+
+
+                    // show an alert dialog to confirm
+                    val clickedItem = parent.getItemAtPosition(position).toString()
+
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Remove Food")
+                        setMessage("Do you want to remove $clickedItem from your diary?")
+                        setPositiveButton("Delete") { _, _ ->
+                            // remove clicked item from second list view
+                            arrDinner.removeAt(position)
+                            adapterDinner.notifyDataSetChanged()
+
+
+                            db.delete("FOODDINNER", "FOODNAME = '$clickedItem'", null)
+                        }
+                        setNeutralButton("Cancel") { _, _ -> }
+                    }.create().show()
+
+                }
+
+
+            //display DINNER data in list
+            val rsDINNER = db.rawQuery("SELECT * FROM FOODDINNER", null)
+            while (rsDINNER.moveToNext()) {
+                val foodname = rsDINNER.getString(1)
+                arrDinner.add(foodname)
+                adapterDinner.notifyDataSetChanged()
+            }
 
 
         }
