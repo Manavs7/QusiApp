@@ -16,7 +16,13 @@ import com.example.qusi.SQLiteHelper
 import com.example.qusi.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.round
-
+import android.R.id
+import android.text.TextUtils
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.facebook.stetho.common.android.FragmentCompatUtil
+import java.net.UnknownServiceException
 
 
 class HomeFragment : Fragment() {
@@ -94,29 +100,18 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            //Maintenance cal Progressbar
-            val etCaloriesBurned = v.findViewById<EditText>(R.id.etCaloriesBurned)
-            val calorieBurnedCal = etCaloriesBurned.text.toString().toDouble()
-            val CaloriesBurnedPer = (calorieBurnedCal / maintenanceCal * 100.0).toInt()
-            val ProgrMaintenanceCal = v.findViewById<ProgressBar>(R.id.ProgrMaintenance)
-            ProgrMaintenanceCal.progress = CaloriesBurnedPer
 
             //berekening daily Protein goals
             val ProteinGoalG = weight * 2
             val ProteinGoalC = ProteinGoalG * 4
-            val ProteinGoalPer = (ProteinGoalC / maintenanceCal * 100.0).toInt()
-
-            //val ConsumedProteinG = rs.getString("").toDouble()
-            //  val ProteinCalBurned  = ConsumedProteinG / 4
-            //ProteinGoalPer = ProteinCalBurned/ProteinGoalC
 
 
-            val ProgrProtein = v.findViewById<ProgressBar>(R.id.ProgrProtein)
-            ProgrProtein.progress = ProteinGoalPer
 
-            val txtProteinPer = v.findViewById<TextView>(R.id.txtProteinPer)
 
-            txtProteinPer.text = "$ProteinGoalPer%"
+
+
+
+
 
             //berekeing daily fat goals
             val FatGoalG = weight * 0.88;
@@ -144,9 +139,7 @@ class HomeFragment : Fragment() {
             User.uFatCal = FatGoalCal.toInt()
             User.uCarbsG = CarbsGoalG.toInt()
             User.uCarbsCal = CarbsGoalCal.toInt()
-            User.uProteinPer = ProteinGoalPer
-            User.uFatPer = FatGoalPer
-            User.uCarbsPer = CarbsGoalPer
+
 
             //update data in the table GOAL
             val cv = ContentValues()
@@ -185,10 +178,74 @@ class HomeFragment : Fragment() {
                         "Done",
                         DialogInterface.OnClickListener { dialogInterface, i ->
 
-                            val etfoodname = mDialogView.findViewById<EditText>(R.id.etFoodname)
+                            //Variables in custum Dialog
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val etfoodProteinG = mDialogView.findViewById<EditText>(R.id.etProteing)
+                            val etfoodFatG = mDialogView.findViewById<EditText>(R.id.etFatg)
+                            val etfoodCarbsG = mDialogView.findViewById<EditText>(R.id.etCarbsg)
+                            //val etFoodAmountG = mDialogView.findViewById<EditText>(R.id.FoodAmountG)
+
                             val cvFood = ContentValues()
                             cvFood.put("FOODNAME", etfoodname.text.toString())
-                            db.insert("FOOD", null, cvFood)
+                            cvFood.put("FOODPROTEING", etfoodProteinG.text.toString())
+                            cvFood.put("FOODFATG", etfoodFatG.text.toString())
+                            cvFood.put("FOODCARBSG", etfoodCarbsG.text.toString())
+
+                            //Fout tolerantie Food
+                            if(etfoodname.text.toString() == "")
+                            {
+
+
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food cannot be empty!")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            //fout tolerantie Food Protein
+                            else if (etfoodProteinG.length() == 0 || etfoodProteinG.text.toString().toDouble()<0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food protein cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodFatG.length() == 0 || etfoodFatG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Fat cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodCarbsG.length() == 0 || etfoodCarbsG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Carbs cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+                            else
+                            {
+                                db.insert("FOODBREAKFAST", null, cvFood)
+                                arrBreakfast.add(etfoodname.text.toString())
+                                adapterBreakfast.notifyDataSetChanged()
+                            }
+
+                            //reload fragment
+                            val navController: NavController = requireActivity().findNavController(R.id.container_fragment)
+                            navController.run {
+                                popBackStack()
+                                navigate(R.id.homeFragment)}
 
                         })
 
@@ -198,7 +255,6 @@ class HomeFragment : Fragment() {
                 mBuiler.show()
 
             }
-
 
             lstBreakfast.onItemClickListener =
                 AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -215,25 +271,470 @@ class HomeFragment : Fragment() {
                             arrBreakfast.removeAt(position)
                             adapterBreakfast.notifyDataSetChanged()
 
-                            db.delete("FOOD", "FOODNAME = ?", null)
+
+                             db.delete("FOODBREAKFAST", "FOODNAME = '$clickedItem'", null)
+
+                            //reload fragment
+                            val navController: NavController = requireActivity().findNavController(R.id.container_fragment)
+                            navController.run {
+                                popBackStack()
+                                navigate(R.id.homeFragment)}
+
+
                         }
                         setNeutralButton("Cancel") { _, _ -> }
                     }.create().show()
 
                 }
 
-            //display breakfast data in list
-            val rsFood = db.rawQuery("SELECT * FROM FOOD", null)
-            while (rsFood.moveToNext()) {
-                val foodname = rsFood.getString(1)
+
+
+            //display breakfast data in list + updating Macronutrienten
+            val rsBREAKFAST = db.rawQuery("SELECT * FROM FOODBREAKFAST", null)
+           while (rsBREAKFAST.moveToNext()) {
+                val foodname = rsBREAKFAST.getString(1)
                 arrBreakfast.add(foodname)
                 adapterBreakfast.notifyDataSetChanged()
+
             }
 
+            //execute querry for sum database
+            val sumFoodProtein = db.rawQuery("SELECT SUM(FOODPROTEING) FROM FOODBREAKFAST", null)
+            val sumFoodFat = db.rawQuery("SELECT SUM(FOODFATG) FROM FOODBREAKFAST", null)
+            val sumFoodCarbs = db.rawQuery("SELECT SUM(FOODCARBSG) FROM FOODBREAKFAST", null)
+
+            var consumedprotein: Int
+            var consumedFat: Int
+            var consumedCarbs: Int
+            var totalFoodCalories: Int
+            if(sumFoodProtein.moveToFirst())
+            {
+                consumedprotein = sumFoodProtein.getDouble(0).toInt()
+                User.uFoodProteinCal = consumedprotein * 4
+            }
+            if(sumFoodFat.moveToFirst())
+            {
+                consumedFat = sumFoodFat.getDouble(0).toInt()
+                User.uFoodFatCal = consumedFat * 9
+            }
+
+            if(sumFoodCarbs.moveToFirst())
+            {
+                consumedCarbs = sumFoodCarbs.getDouble(0).toInt()
+                User.uFoodCarbsCal = consumedCarbs * 4
+            }
+
+            totalFoodCalories = User.uFoodProteinCal + User.uFoodFatCal + User.uFoodCarbsCal
+            User.uTotalFoodCal = totalFoodCalories
+
+
+            //progress bar maintenance cal-------------------------------------------------------------------------------------------
+            val txtCaloriesBurned = v.findViewById<TextView>(R.id.txtCaloriesBurned)
+            txtCaloriesBurned.text = User.uTotalFoodCal.toString()
+            var CaloriesBurnedPer = ( txtCaloriesBurned.text.toString().toDouble() / maintenanceCal * 100.0).toInt()
+            val ProgrMaintenanceCal = v.findViewById<ProgressBar>(R.id.ProgrMaintenance)
+            ProgrMaintenanceCal.progress = CaloriesBurnedPer
+
+
+            //progress bar Protein cal-------------------------------------------------------------------------------------------------
+            var ProteinGoalPer = (User.uFoodProteinCal/ ProteinGoalC * 100.0).toInt()
+            val ProgrProteinCal = v.findViewById<ProgressBar>(R.id.ProgrProtein)
+            ProgrProteinCal.progress = ProteinGoalPer
+           val txtProteinPer = v.findViewById<TextView>(R.id.txtProteinPer)
+            txtProteinPer.text = "$ProteinGoalPer%"
+
+            //progress bar Fat Cal
+
+
+
+            //progress bar Carbs Cal
+
+
+
+
+
+
         //--------------------------------------------Lunch list------------------------------------------------------------
+            //Lunch
+            val addButtonLunch = v.findViewById<ImageView>(R.id.addLunch)
+            val lstLunch= v.findViewById<ListView>(R.id.lstLunch)
+            val arrLunch = mutableListOf<String>()
+            val adapterLunch: ArrayAdapter<String> =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrLunch)
+            lstLunch.adapter = adapterLunch
+
+            addButtonLunch.setOnClickListener {
+                //custum dialog linken aan layout
+                val mDialogView =
+                    LayoutInflater.from(requireContext()).inflate(R.layout.addfooddiaolog, null)
+                //alert dialog opbouwen
+                var mBuiler = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                    .setTitle("Add Food To Your Diary")
+                    .setPositiveButton(
+                        "Done",
+                        DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val etfoodProteinG = mDialogView.findViewById<EditText>(R.id.etProteing)
+                            val etfoodFatG = mDialogView.findViewById<EditText>(R.id.etFatg)
+                            val etfoodCarbsG = mDialogView.findViewById<EditText>(R.id.etCarbsg)
+                           // val etFoodAmountG = mDialogView.findViewById<EditText>(R.id.FoodAmountG)
+
+                            val cvFood = ContentValues()
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            cvFood.put("FOODPROTEING", etfoodProteinG.text.toString())
+                            cvFood.put("FOODFATG", etfoodFatG.text.toString())
+                            cvFood.put("FOODCARBSG", etfoodCarbsG.text.toString())
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            //check if food is empty
+                            if(etfoodname.text.toString() == "")
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food cannot be empty!")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            //fout tolerantie Food Protein
+                            else if (etfoodProteinG.length() == 0 || etfoodProteinG.text.toString().toDouble()<0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food protein cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodFatG.length() == 0 || etfoodFatG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Fat cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodCarbsG.length() == 0 || etfoodCarbsG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Carbs cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+                            else
+                            {
+                                db.insert("FOODLUNCH", null, cvFood)
+                                arrLunch.add(etfoodname.text.toString())
+                                adapterLunch.notifyDataSetChanged()
+                            }
+
+                        })
+
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                mBuiler.show()
+
+            }
+
+
+
+            lstLunch.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+
+
+                    // show an alert dialog to confirm
+                    val clickedItem = parent.getItemAtPosition(position).toString()
+
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Remove Food")
+                        setMessage("Do you want to remove $clickedItem from your diary?")
+                        setPositiveButton("Delete") { _, _ ->
+                            // remove clicked item from second list view
+                            arrLunch.removeAt(position)
+                            adapterLunch.notifyDataSetChanged()
+
+
+                            db.delete("FOODLUNCH", "FOODNAME = '$clickedItem'", null)
+                        }
+                        setNeutralButton("Cancel") { _, _ -> }
+                    }.create().show()
+
+                }
+
+
+            //display LUNCH data in list
+            val rsLUNCH = db.rawQuery("SELECT * FROM FOODLUNCH", null)
+            while (rsLUNCH.moveToNext()) {
+                val foodname = rsLUNCH.getString(1)
+                arrLunch.add(foodname)
+                adapterLunch.notifyDataSetChanged()
+            }
+
+            //--------------------------------------------Snacks list------------------------------------------------------------
+            //Snacks variables
+            val addButtonSnacks = v.findViewById<ImageView>(R.id.addSnacks)
+            val lstSnacks= v.findViewById<ListView>(R.id.lstSnacks)
+            val arrSnacks = mutableListOf<String>()
+            val adapterSnacks: ArrayAdapter<String> =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrSnacks)
+            lstSnacks.adapter = adapterSnacks
+
+
+            addButtonSnacks.setOnClickListener {
+                //custum dialog linken aan layout
+                val mDialogView =
+                    LayoutInflater.from(requireContext()).inflate(R.layout.addfooddiaolog, null)
+                //alert dialog opbouwen
+                var mBuiler = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                    .setTitle("Add Food To Your Diary")
+                    .setPositiveButton(
+                        "Done",
+                        DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val etfoodProteinG = mDialogView.findViewById<EditText>(R.id.etProteing)
+                            val etfoodFatG = mDialogView.findViewById<EditText>(R.id.etFatg)
+                            val etfoodCarbsG = mDialogView.findViewById<EditText>(R.id.etCarbsg)
+                           // val etFoodAmountG = mDialogView.findViewById<EditText>(R.id.FoodAmountG)
+
+                            val cvFood = ContentValues()
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            cvFood.put("FOODPROTEING", etfoodProteinG.text.toString())
+                            cvFood.put("FOODFATG", etfoodFatG.text.toString())
+                            cvFood.put("FOODCARBSG", etfoodCarbsG.text.toString())
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+
+                            //check if food is empty
+                            if(etfoodname.text.toString() == "")
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food cannot be empty!")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+                            //fout tolerantie Food Protein
+                            else if (etfoodProteinG.length() == 0 || etfoodProteinG.text.toString().toDouble()<0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food protein cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodFatG.length() == 0 || etfoodFatG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Fat cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodCarbsG.length() == 0 || etfoodCarbsG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Carbs cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+                            else
+                            {
+                                db.insert("FOODSNACKS", null, cvFood)
+                                arrSnacks.add(etfoodname.text.toString())
+                                adapterSnacks.notifyDataSetChanged()
+                            }
+
+                        })
+
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                mBuiler.show()
+
+            }
+
+
+            lstSnacks.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+
+
+                    // show an alert dialog to confirm
+                    val clickedItem = parent.getItemAtPosition(position).toString()
+
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Remove Food")
+                        setMessage("Do you want to remove $clickedItem from your diary?")
+                        setPositiveButton("Delete") { _, _ ->
+                            // remove clicked item from second list view
+                            arrSnacks.removeAt(position)
+                            adapterSnacks.notifyDataSetChanged()
+
+
+                            db.delete("FOODSNACKS", "FOODNAME = '$clickedItem'", null)
+                        }
+                        setNeutralButton("Cancel") { _, _ -> }
+                    }.create().show()
+
+                }
+
+
+            //display SNACKS data in list
+            val rsSNACKS = db.rawQuery("SELECT * FROM FOODSNACKS", null)
+            while (rsSNACKS.moveToNext()) {
+                val foodname = rsSNACKS.getString(1)
+                arrSnacks.add(foodname)
+                adapterSnacks.notifyDataSetChanged()
+            }
+
+
+        //--------------------------------------------DINNER list------------------------------------------------------------
+            //DINNER variables
+            val addButtonDinner = v.findViewById<ImageView>(R.id.addDinner)
+            val lstDinner= v.findViewById<ListView>(R.id.lstDinner)
+            val arrDinner = mutableListOf<String>()
+            val adapterDinner: ArrayAdapter<String> =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, arrDinner)
+            lstDinner.adapter = adapterDinner
+
+
+            addButtonDinner.setOnClickListener {
+                //custum dialog linken aan layout
+                val mDialogView =
+                    LayoutInflater.from(requireContext()).inflate(R.layout.addfooddiaolog, null)
+                //alert dialog opbouwen
+                var mBuiler = AlertDialog.Builder(requireContext())
+                    .setView(mDialogView)
+                    .setTitle("Add Food To Your Diary")
+                    .setPositiveButton(
+                        "Done",
+                        DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            val etfoodname = mDialogView.findViewById<AutoCompleteTextView>(R.id.etFoodname)
+                            val etfoodProteinG = mDialogView.findViewById<EditText>(R.id.etProteing)
+                            val etfoodFatG = mDialogView.findViewById<EditText>(R.id.etFatg)
+                            val etfoodCarbsG = mDialogView.findViewById<EditText>(R.id.etCarbsg)
+                            //val etFoodAmountG = mDialogView.findViewById<EditText>(R.id.FoodAmountG)
+
+                            val cvFood = ContentValues()
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            cvFood.put("FOODPROTEING", etfoodProteinG.text.toString())
+                            cvFood.put("FOODFATG", etfoodFatG.text.toString())
+                            cvFood.put("FOODCARBSG", etfoodCarbsG.text.toString())
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+                            cvFood.put("FOODNAME", etfoodname.text.toString())
+
+                            //check if food is empty
+                            if(etfoodname.text.toString() == "")
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food cannot be empty!")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+                            //fout tolerantie Food Protein
+                            else if (etfoodProteinG.length() == 0 || etfoodProteinG.text.toString().toDouble()<0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food protein cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodFatG.length() == 0 || etfoodFatG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Fat cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+
+                            else if (etfoodCarbsG.length() == 0 || etfoodCarbsG.text.toString().toDouble() < 0.1)
+                            {
+                                var errorAlert = AlertDialog.Builder(requireContext())
+                                    .setTitle("Food Carbs cannot be 0 or empty")
+                                    .setPositiveButton("Okay",DialogInterface.OnClickListener { dialogInterface, i ->
+                                        dialogInterface.dismiss()
+                                    })
+                                errorAlert.show()
+                            }
+                            else
+                            {
+                                db.insert("FOODDINNER", null, cvFood)
+                                arrDinner.add(etfoodname.text.toString())
+                                adapterDinner.notifyDataSetChanged()
+                            }
+
+                        })
+
+                    .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                mBuiler.show()
+
+            }
+
+
+            lstDinner.onItemClickListener =
+                AdapterView.OnItemClickListener { parent, view, position, id ->
+
+
+                    // show an alert dialog to confirm
+                    val clickedItem = parent.getItemAtPosition(position).toString()
+
+                    MaterialAlertDialogBuilder(requireContext()).apply {
+                        setTitle("Remove Food")
+                        setMessage("Do you want to remove $clickedItem from your diary?")
+                        setPositiveButton("Delete") { _, _ ->
+                            // remove clicked item from second list view
+                            arrDinner.removeAt(position)
+                            adapterDinner.notifyDataSetChanged()
+
+
+                            db.delete("FOODDINNER", "FOODNAME = '$clickedItem'", null)
+                        }
+                        setNeutralButton("Cancel") { _, _ -> }
+                    }.create().show()
+
+                }
+
+
+            //display DINNER data in list
+            val rsDINNER = db.rawQuery("SELECT * FROM FOODDINNER", null)
+            while (rsDINNER.moveToNext()) {
+                val foodname = rsDINNER.getString(1)
+                arrDinner.add(foodname)
+                adapterDinner.notifyDataSetChanged()
+            }
+
+            //Updating Macronutrienten
+
 
 
         }
+
             return v;
      }
 

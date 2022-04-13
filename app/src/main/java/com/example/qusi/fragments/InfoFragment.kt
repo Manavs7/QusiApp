@@ -23,17 +23,30 @@ class InfoFragment : Fragment() {
         val txtProtein = v.findViewById<TextView>(R.id.txtProtein)
         val txtFat = v.findViewById<TextView>(R.id.txtFat)
         val txtCarbs = v.findViewById<TextView>(R.id.txtCarbs)
-      /*  val txtProteinPer = v.findViewById<TextView>(R.id.txtProteinPer)
-        val txtFatPer = v.findViewById<TextView>(R.id.txtFatPer)
-        val txtCarbsPer = v.findViewById<TextView>(R.id.txtCarbsPer)
 
-        txtProteinPer.text = "${User.uProteinPer}%"
-        txtFatPer.text = "${User.uFatPer}%"
-        txtCarbsPer.text = "${User.uCarbsPer}%"
-        */
+        val txtProteinCal = v.findViewById<TextView>(R.id.txtProteinCal)
+        val txtFatCal = v.findViewById<TextView>(R.id.txtFatCal)
+        val txtCarbCal = v.findViewById<TextView>(R.id.txtCarbCal)
+        val txtInfoMaintenanceCalorie = v.findViewById<TextView>(R.id.txtInfoMaintenanceCalorie)
+
         txtProtein.text = "${User.uProteinG}g"
         txtFat.text = "${User.uFatG}g"
         txtCarbs.text = "${User.uCarbsG}g"
+
+        txtProteinCal.text = "${User.uProteinCal}cal"
+        txtFatCal.text = "${User.uFatCal}cal"
+        txtCarbCal.text = "${User.uCarbsCal}cal"
+
+        txtInfoMaintenanceCalorie.text = "${User.uMainetenanceCal} Cal / day"
+
+        val consumedProteinCal = v.findViewById<TextView>(R.id.consumedProteinCal)
+        val consumedFatCal = v.findViewById<TextView>(R.id.consumedFatCal)
+        val consumedCarbCal = v.findViewById<TextView>(R.id.consumedCarbsCal)
+        val totalfoodcal = v.findViewById<TextView>(R.id.TotalFoodCalories)
+        consumedProteinCal.text = User.uFoodProteinCal.toString()
+        consumedFatCal.text = User.uFoodFatCal.toString()
+        consumedCarbCal.text = User.uFoodCarbsCal.toString()
+        totalfoodcal.text  =User.uTotalFoodCal.toString()
         return  v;
     }
 

@@ -23,11 +23,10 @@
             android:background="@drawable/gradientbackground"
             >
 
-            <EditText
-                android:id="@+id/etCaloriesBurned"
+            <TextView
+                android:id="@+id/txtCaloriesBurned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1750"
                 android:textAllCaps="false"
                 android:textColor="#000000"
                 android:textSize="20sp"

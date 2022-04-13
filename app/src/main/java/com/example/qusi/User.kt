@@ -24,9 +24,13 @@ companion object{
     var uCarbsCal: Int = 0
     var uCarbsG: Int = 0
 
-    var uProteinPer: Int = 0
-    var uFatPer: Int= 0
-    var uCarbsPer: Int = 0
+
+
+    //user consumed calories
+    var uTotalFoodCal: Int = 0
+    var uFoodProteinCal = 0
+    var uFoodFatCal = 0
+    var uFoodCarbsCal = 0
 
 }
 
